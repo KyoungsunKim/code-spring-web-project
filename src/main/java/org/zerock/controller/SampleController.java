@@ -6,22 +6,25 @@ import java.util.Arrays;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.zerock.domain.SampleDTO;
 import org.zerock.domain.SampleDTOList;
+import org.zerock.domain.Ticket;
 import org.zerock.domain.TodoDTO;
 
 import lombok.extern.log4j.Log4j;
 
-@Controller
+@RestController
+//@Controller
 @RequestMapping("/sample/*")
 @Log4j
 public class SampleController {
@@ -140,5 +143,11 @@ public class SampleController {
 			log.info("name: " + file.getOriginalFilename());
 			log.info("size: " + file.getSize());
 		});
+	}
+	
+	@PostMapping("/ticket")
+	public Ticket convert(@RequestBody Ticket ticket) {
+		log.info("convert......ticket" + ticket);
+		return ticket;
 	}
 }
