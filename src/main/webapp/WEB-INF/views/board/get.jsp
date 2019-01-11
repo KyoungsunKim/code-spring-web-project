@@ -31,14 +31,14 @@
            		</div>
            		<button data-oper="modify" class="btn btn-default">Modify</button>
            		<button data-oper="list" class="btn btn-info">List</button>
-           		
+
            		<form id="operForm" action="/board/modify" method="get">
            		   <input type="hidden" id="bno" name="bno" value='<c:out value="${board.bno}"/>'>
            		   <input type="hidden" name="pageNum" value='<c:out value="${cri.pageNum}"/>'>
            		   <input type="hidden" name="amount" value='<c:out value="${cri.amount}"/>'>
            		   <input type="hidden" name="type" value='<c:out value="${cri.type}"/>'>
            		   <input type="hidden" name="keyword" value='<c:out value="${cri.keyword}"/>'>
-           		</form>            	
+           		</form>
             </div>
             <!-- /.panel-body -->
         </div>
@@ -48,19 +48,66 @@
 </div>
 <!-- /.row -->
 
-<script>
+<script type="text/javascript" src="/resources/js/reply.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function() {
+	console.log("============");
+	console.log("JS TEST");
+
+	var bnoValue = '<c:out value="${board.bno}"/>';
+
+	// for replyService add test
+	replyService.add(
+			{reply:"JS TEST", replyer:"tester", bno:bnoValue},
+			function(result) {
+				alert("RESULT: " + result);
+			}
+	);
+
+	// for replyService getList test
+	replyService.getList({bno:banoValue, page:1}, function(list) {
+		for (var i = 0, len = list.length || 0; i < len; i++) {
+			console.log(list[i]);
+		}
+	});
+
+	// for replyService remove test
+	replyService.remove(23, function(count) {
+		console.log(count);
+
+		if (count === "success") {
+			alert("REMOVED");
+		}
+	}, function(err) {
+		alert("ERROR...");
+	});
+
+	// for replyService update test
+	replyService.update({
+		rno : 22,
+		bno : bnoValue,
+		reply : "Modified Reply..."
+	}, function(result) {
+		alert("수정 완료...");
+	});
+
+});
+</script>
+
+<script type="text/javascript">
 $(document).ready(function() {
 	var operForm = $("#operForm");
-	
+
 	$("button[data-oper='modify']").on("click", function(e) {
 		operForm.attr("action", "/board/modify").submit();
 	});
-	
+
 	$("button[data-oper='list']").on("click", function(e) {
         operForm.find("#bno").remove();
         operForm.attr("action", "/board/list").submit();
     });
 });
 </script>
-    
+
 <%@ include file="../includes/footer.jsp"%>
