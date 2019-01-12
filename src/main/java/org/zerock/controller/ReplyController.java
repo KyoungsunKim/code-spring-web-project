@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.zerock.domain.Criteria;
+import org.zerock.domain.PageDTO;
+import org.zerock.domain.ReplyPageDTO;
 import org.zerock.domain.ReplyVO;
 import org.zerock.service.ReplyService;
 
@@ -46,14 +48,14 @@ public class ReplyController {
 	}
 
 	@GetMapping(value = "/pages/{bno}/{page}")
-	public ResponseEntity<List<ReplyVO>> getList(
+	public ResponseEntity<ReplyPageDTO> getList(
 			@PathVariable("bno") Long bno,
 			@PathVariable("page") int page) {
 		log.info("getList............");
 		Criteria cri = new Criteria(page, 10);
 		log.info(cri);
 
-		return new ResponseEntity<>(service.getList(cri, bno), HttpStatus.OK);
+		return new ResponseEntity<>(service.getListPage(cri, bno), HttpStatus.OK);
 	}
 
 	@GetMapping(value = "/{rno}",
@@ -73,7 +75,7 @@ public class ReplyController {
 				: new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 
-	@RequestMapping(value = "",
+	@RequestMapping(value = "/{rno}",
 			method = { RequestMethod.PUT, RequestMethod.PATCH},
 			produces = { MediaType.TEXT_PLAIN_VALUE },
 			consumes = "application/json")
